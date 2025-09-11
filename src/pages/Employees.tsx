@@ -177,17 +177,17 @@ export default function Employees() {
               </SelectContent>
             </Select>
             <Select 
-              value={filters.departmentIds?.[0] || ''} 
+              value={filters.departmentIds?.[0] || 'all'} 
               onValueChange={(value) => setFilters({ 
                 ...filters, 
-                departmentIds: value ? [value] : undefined 
+                departmentIds: value === 'all' ? undefined : [value] 
               })}
             >
               <SelectTrigger className="w-48 bg-white text-black">
                 <SelectValue placeholder="Department" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Departments</SelectItem>
+                <SelectItem value="all">All Departments</SelectItem>
                 {mockDepartments.map(dept => (
                   <SelectItem key={dept.id} value={dept.id}>
                     {dept.name}
