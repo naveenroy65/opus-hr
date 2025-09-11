@@ -35,45 +35,37 @@ const App = () => {
     setIsAuthenticated(false);
   };
 
-  if (!isAuthenticated) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <LoginForm onLogin={handleLogin} />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <SidebarProvider>
-            <div className="min-h-screen flex w-full">
-              <AppSidebar />
-              <div className="flex-1 flex flex-col">
-                <Header onLogout={handleLogout} />
-                <main className="flex-1 p-6">
-                  <Routes>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/employees" element={<Employees />} />
-                    <Route path="/departments" element={<Departments />} />
-                    <Route path="/attendance" element={<Attendance />} />
-                    <Route path="/leave-requests" element={<LeaveRequests />} />
-                    <Route path="/payroll" element={<Payroll />} />
-                    <Route path="/reports" element={<Reports />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
+          {!isAuthenticated ? (
+            <LoginForm onLogin={handleLogin} />
+          ) : (
+            <SidebarProvider>
+              <div className="min-h-screen flex w-full">
+                <AppSidebar />
+                <div className="flex-1 flex flex-col">
+                  <Header onLogout={handleLogout} />
+                  <main className="flex-1 p-6">
+                    <Routes>
+                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/employees" element={<Employees />} />
+                      <Route path="/departments" element={<Departments />} />
+                      <Route path="/attendance" element={<Attendance />} />
+                      <Route path="/leave-requests" element={<LeaveRequests />} />
+                      <Route path="/payroll" element={<Payroll />} />
+                      <Route path="/reports" element={<Reports />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                </div>
               </div>
-            </div>
-          </SidebarProvider>
+            </SidebarProvider>
+          )}
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
