@@ -191,14 +191,14 @@ export default function AttendancePage() {
             </Popover>
 
             <Select 
-              value={filters.departmentId || ''} 
-              onValueChange={(value) => setFilters({ ...filters, departmentId: value })}
+              value={filters.departmentId || 'all'} 
+              onValueChange={(value) => setFilters({ ...filters, departmentId: value === 'all' ? '' : value })}
             >
               <SelectTrigger className="w-48 bg-white text-black">
                 <SelectValue placeholder="All Departments" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Departments</SelectItem>
+                <SelectItem value="all">All Departments</SelectItem>
                 {mockDepartments.map(dept => (
                   <SelectItem key={dept.id} value={dept.id}>
                     {dept.name}
