@@ -336,19 +336,47 @@ export default function Reports() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => {
+                  setFilters({ ...filters, reportType: 'attendance' });
+                  generateReport();
+                }}
+              >
                 <FileText className="mr-2 h-4 w-4" />
                 Monthly Attendance
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => {
+                  setFilters({ ...filters, reportType: 'payroll' });
+                  generateReport();
+                }}
+              >
                 <BarChart3 className="mr-2 h-4 w-4" />
                 Payroll Summary
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => {
+                  setFilters({ ...filters, reportType: 'leave' });
+                  generateReport();
+                }}
+              >
                 <FileText className="mr-2 h-4 w-4" />
                 Leave Analytics
               </Button>
-              <Button variant="outline" className="w-full justify-start">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start"
+                onClick={() => {
+                  setFilters({ ...filters, reportType: 'employee' });
+                  generateReport();
+                }}
+              >
                 <BarChart3 className="mr-2 h-4 w-4" />
                 Department Metrics
               </Button>

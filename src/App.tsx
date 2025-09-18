@@ -15,6 +15,7 @@ import Attendance from "./pages/Attendance";
 import LeaveRequests from "./pages/LeaveRequests";
 import Payroll from "./pages/Payroll";
 import Reports from "./pages/Reports";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => {
                       <Route path="/leave-requests" element={<LeaveRequests />} />
                       <Route path="/payroll" element={<Payroll />} />
                       <Route path="/reports" element={<Reports />} />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>

@@ -27,10 +27,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CalendarIcon, Check, X, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import { mockEmployees, mockDepartments, mockAttendance } from '@/data/mockData';
 import { Attendance, AttendanceFilters } from '@/types/hr';
 
 export default function AttendancePage() {
+  const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [attendance, setAttendance] = useState<Attendance[]>(mockAttendance);
   const [filters, setFilters] = useState<AttendanceFilters>({

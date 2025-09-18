@@ -25,10 +25,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { DollarSign, Eye, Download, CheckCircle, Clock } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { mockPayrolls, mockEmployees, mockDepartments } from '@/data/mockData';
 import { Payroll } from '@/types/hr';
 
 export default function PayrollPage() {
+  const { toast } = useToast();
   const [payrolls, setPayrolls] = useState<Payroll[]>(mockPayrolls);
   const [selectedPayroll, setSelectedPayroll] = useState<Payroll | null>(null);
   const [filters, setFilters] = useState({
@@ -70,6 +72,31 @@ export default function PayrollPage() {
           : payroll
       )
     );
+    toast({
+      title: "Payment Processed",
+      description: "The payroll has been marked as paid successfully.",
+    });
+  };
+
+  const generatePayroll = () => {
+    toast({
+      title: "Payroll Generated",
+      description: "Monthly payroll has been generated for all employees.",
+    });
+  };
+
+  const exportPayroll = () => {
+    toast({
+      title: "Export Started",
+      description: "Payroll export will be downloaded shortly.",
+    });
+  };
+
+  const downloadPayslip = (employeeName: string) => {
+    toast({
+      title: "Download Started",
+      description: `Payslip for ${employeeName} will be downloaded shortly.`,
+    });
   };
 
   const getPayrollStats = () => {
@@ -106,7 +133,7 @@ export default function PayrollPage() {
             Manage employee salary payments and records
           </p>
         </div>
-        <Button>
+        <Button onClick={generatePayroll}>
           <DollarSign className="mr-2 h-4 w-4" />
           Generate Payroll
         </Button>
@@ -211,7 +238,7 @@ export default function PayrollPage() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline">
+            <Button variant="outline" onClick={exportPayroll}>
               <Download className="mr-2 h-4 w-4" />
               Export
             </Button>
@@ -382,7 +409,10 @@ export default function PayrollPage() {
               )}
 
               <div className="flex justify-end gap-2">
-                <Button variant="outline">
+                <Button 
+                  variant="outline"
+                  onClick={() => downloadPayslip(getEmployeeName(selectedPayroll.employeeId))}
+                >
                   <Download className="mr-2 h-4 w-4" />
                   Download Payslip
                 </Button>

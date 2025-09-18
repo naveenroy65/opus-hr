@@ -20,10 +20,12 @@ import {
 } from '@/components/ui/dialog';
 import { FileText, Check, X, Calendar, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { useToast } from '@/hooks/use-toast';
 import { mockLeaveRequests, mockEmployees } from '@/data/mockData';
 import { LeaveRequest } from '@/types/hr';
 
 export default function LeaveRequests() {
+  const { toast } = useToast();
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>(mockLeaveRequests);
   const [selectedRequest, setSelectedRequest] = useState<LeaveRequest | null>(null);
   const [approvalComment, setApprovalComment] = useState('');
@@ -49,6 +51,10 @@ export default function LeaveRequests() {
     );
     setSelectedRequest(null);
     setApprovalComment('');
+    toast({
+      title: "Leave Request Approved",
+      description: "The leave request has been approved successfully.",
+    });
   };
 
   const handleReject = (requestId: string) => {
@@ -67,6 +73,11 @@ export default function LeaveRequests() {
     );
     setSelectedRequest(null);
     setApprovalComment('');
+    toast({
+      title: "Leave Request Rejected",
+      description: "The leave request has been rejected.",
+      variant: "destructive",
+    });
   };
 
   const getStatusStats = () => {
