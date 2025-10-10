@@ -22,47 +22,56 @@ import {
   LayoutDashboard,
   Settings,
 } from 'lucide-react';
+import { useRoleAccess } from '@/hooks/useRoleAccess';
 
 const navigationItems = [
   {
     title: 'Dashboard',
     url: '/dashboard',
     icon: LayoutDashboard,
+    requiredPermission: 'canViewDashboard' as const,
   },
   {
     title: 'Employees',
     url: '/employees',
     icon: Users,
+    requiredPermission: 'canViewEmployees' as const,
   },
   {
     title: 'Departments',
     url: '/departments',
     icon: Building2,
+    requiredPermission: 'canViewDepartments' as const,
   },
   {
     title: 'Attendance',
     url: '/attendance',
     icon: Calendar,
+    requiredPermission: 'canViewAttendance' as const,
   },
   {
     title: 'Leave Requests',
     url: '/leave-requests',
     icon: FileText,
+    requiredPermission: 'canViewLeaveRequests' as const,
   },
   {
     title: 'Payroll',
     url: '/payroll',
     icon: DollarSign,
+    requiredPermission: 'canViewPayroll' as const,
   },
   {
     title: 'Reports',
     url: '/reports',
     icon: BarChart3,
+    requiredPermission: 'canViewReports' as const,
   },
   {
     title: 'Profile',
     url: '/profile',
     icon: User,
+    requiredPermission: 'canViewProfile' as const,
   },
 ];
 
@@ -71,6 +80,7 @@ export default function AppSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const isCollapsed = state === 'collapsed';
+  const permissions = useRoleAccess();
 
   const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
@@ -97,16 +107,18 @@ export default function AppSidebar() {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className={getNavCls}>
-                      <item.icon className="mr-3 h-4 w-4" />
-                      {!isCollapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navigationItems
+                .filter((item) => permissions[item.requiredPermission])
+                .map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink to={item.url} className={getNavCls}>
+                        <item.icon className="mr-3 h-4 w-4" />
+                        {!isCollapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
