@@ -62,13 +62,6 @@ export type Database = {
             referencedRelation: "employees"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "attendance_marked_by_fkey"
-            columns: ["marked_by"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
         ]
       }
       audit_logs: {
@@ -105,15 +98,7 @@ export type Database = {
           user_agent?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "audit_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       departments: {
         Row: {
@@ -219,13 +204,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "employees_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "employees_department_id_fkey"
             columns: ["department_id"]
             isOneToOne: false
@@ -237,13 +215,6 @@ export type Database = {
             columns: ["role_id"]
             isOneToOne: false
             referencedRelation: "roles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employees_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_roles_view"
             referencedColumns: ["id"]
           },
         ]
@@ -296,13 +267,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "leave_requests_approver_id_fkey"
-            columns: ["approver_id"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "leave_requests_employee_id_fkey"
             columns: ["employee_id"]
             isOneToOne: false
@@ -345,15 +309,7 @@ export type Database = {
           type?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       payroll: {
         Row: {
@@ -424,13 +380,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "payroll_approver_id_fkey"
-            columns: ["approver_id"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "payroll_employee_id_fkey"
             columns: ["employee_id"]
             isOneToOne: false
@@ -467,15 +416,7 @@ export type Database = {
           phone?: string | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       roles: {
         Row: {
@@ -528,29 +469,11 @@ export type Database = {
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_roles_view"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
-      user_roles_view: {
-        Row: {
-          created_at: string | null
-          email: string | null
-          first_name: string | null
-          id: string | null
-          last_name: string | null
-          role: Database["public"]["Enums"]["app_role"] | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       assign_user_role: {

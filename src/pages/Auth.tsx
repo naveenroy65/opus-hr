@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,11 +10,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import MFASetup from "@/components/auth/MFASetup";
+import MFAVerify from "@/components/auth/MFAVerify";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [showMFASetup, setShowMFASetup] = useState(false);
+  const [showMFAVerify, setShowMFAVerify] = useState(false);
   
   // Login form
   const [loginEmail, setLoginEmail] = useState("");
@@ -49,11 +54,17 @@ const Auth = () => {
           setError(error.message);
         }
       } else {
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully logged in.",
-        });
-        navigate("/dashboard");
+        // Check if MFA is enabled
+        const { data: factors } = await supabase.auth.mfa.listFactors();
+        if (factors && factors.totp && factors.totp.length > 0) {
+          setShowMFAVerify(true);
+        } else {
+          toast({
+            title: "Welcome back!",
+            description: "You have successfully logged in.",
+          });
+          navigate("/dashboard");
+        }
       }
     } catch (err: any) {
       setError(err.message || "An error occurred during login");
@@ -95,9 +106,9 @@ const Auth = () => {
       } else {
         toast({
           title: "Account created!",
-          description: "Welcome to the HR Management System.",
+          description: "Please setup MFA for your account.",
         });
-        navigate("/dashboard");
+        setShowMFASetup(true);
       }
     } catch (err: any) {
       setError(err.message || "An error occurred during signup");
@@ -130,6 +141,29 @@ const Auth = () => {
       setIsLoading(false);
     }
   };
+
+  if (showMFASetup) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <MFASetup onSuccess={() => navigate("/dashboard")} />
+      </div>
+    );
+  }
+
+  if (showMFAVerify) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <MFAVerify 
+          onSuccess={() => navigate("/dashboard")} 
+          onCancel={async () => {
+            setShowMFAVerify(false);
+            const { authService } = await import("@/lib/auth");
+            await authService.signOut();
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
