@@ -1,0 +1,23 @@
+// Auto-generated minimal Prisma schema for HRMS
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  username       String?
+  passwordHash   String
+  role           String
+  locked         Boolean  @default(false)
+  mfaEnabled     Boolean  @default(false)
+  mfaSecret      String?
+  failedAttempts Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
