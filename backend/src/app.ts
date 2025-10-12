@@ -3,15 +3,15 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import pino from 'pino-http';
-import { healthRouter } from './routes/health';
+import { pinoHttp } from 'pino-http';
+import { healthRouter } from './routes/health.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(pino());
+app.use(pinoHttp());
 
 app.use('/api/health', healthRouter);
 
